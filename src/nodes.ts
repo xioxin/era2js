@@ -450,7 +450,7 @@ export class FunctionExpression {
 export class Identifier {
     readonly type: string;
     readonly name: string;
-    constructor(name) {
+    constructor(name: string) {
         this.type = Syntax.Identifier;
         this.name = name;
     }

@@ -1,11 +1,14 @@
-const jison = require("jison");
+const jison = require('jison');
+console.log('jison', jison);
+let Lexer = require('lex');
+
+// const Lexer = require('jison-lex');
 const Parser = jison.Parser;
 const escodegen = require('escodegen');
-import { addNodePosition, o} from "./helper";
-import * as nodes from "./nodes";
+import { readFileSync } from 'fs';
 
-import { readFileSync } from "fs";
-
+import { addNodePosition, o, r } from './helper';
+import * as nodes from './nodes';
 
 declare var $$: any;
 declare var $0: any;
@@ -20,73 +23,87 @@ declare var $8: any;
 declare var $9: any;
 declare var $10: any;
 
-var grammar = {
-    "lex": {
-        "rules": [
-            ["\\s+",                    "/* skip whitespace */"],
-            ["@", "return 'FUNCTION'"]
-            [';(.*)', "return 'NOTES'"],
-            ["[0-9]+(?:\\.[0-9]+)?\\b", "return 'NUMBER';"],
-            ["\\*",                     "return '*';"],
-            ["\\/",                     "return '/';"],
-            ["-",                       "return '-';"],
-            ["\\+",                     "return '+';"],
-            ["\\^",                     "return '^';"],
-            ["\\(",                     "return '(';"],
-            ["\\)",                     "return ')';"],
-            ["PI\\b",                   "return 'PI';"],
-            ["E\\b",                    "return 'E';"],
-            ["$",                       "return 'EOF';"]
-        ]
-    },
-
-    "operators": [
-        ["left", "+", "-"],
-        ["left", "*", "/"],
-        ["left", "^"],
-        ["left", "UMINUS"]
-    ],
-
-
-
-    "bnf": {
-        "expressions" :[
-            // o("e EOF", () => new ExpressionStatement($1) )
-            o("e EOF", "return {type: 'ExpressionStatement', expression: $1};" )
-        ],
-
-        "e" :[
-            o("e + e", (yy) => new yy.BinaryExpression($2, $1, $3)),
-            o("e - e", (yy) => new yy.BinaryExpression($2, $1, $3)),
-            o("e * e", (yy) => new yy.BinaryExpression($2, $1, $3)),
-            o("e / e", (yy) => new yy.BinaryExpression($2, $1, $3)),
-            o("e ^ e", (yy) => new yy.BinaryExpression($2, $1, $3)),
-            o("- e",   (yy) => new yy.UnaryExpression($1, $2) , {"prec": "UMINUS"}),
-            o("( e )", (yy) => $2 ),
-            o("NUMBER", (yy) => new yy.Literal(Number($1), $1)),
-        ]
-    }
+const lexData =  {
+  'rules': [
+    r([], '\\s+'),
+    r([], '@\\S+', (self) => {
+      self.begin('FunIn');
+      return 'FUNCTION';
+    }),
+    r([], ';(.*)', 'NOTES'),
+    r([], '\\*', '*'),
+    r([], '\\/', '/'),
+    r([], '-',  '-'),
+    r([], '\\+', '+'),
+    r([], '\\^', '^'),
+    r([], '\\(', '('),
+    r([], '\\)', ')'),
+    // ['[0-9]+(?:\\.[0-9]+)?\\b', 'return \'NUMBER\';'],
+    r([], '<<EOF>>', 'EOF'),
+    r([], '\\S', 'CHA'),
+    // r(['FunIn'], '.', 'INVALID'),
+  ]
 };
 
-var parser = new Parser(grammar);
+const grammar = {
+  'lex': lexData,
+  'operators': [
+    ['left', '+', '-'],
+    ['left', '*', '/'],
+    ['left', '^'],
+    ['left', 'UMINUS']
+  ],
+  'bnf': {
+    'expressions': [
+      // o("e EOF", () => new ExpressionStatement($1) )
+      o('programs EOF', 'return {type: "out", body: $1};')
+    ],
+    'programs': [
+      o('programs program', (yy) => $1.body.push($2)),
+      o('program', (yy) => new yy.Script([$1])),
+    ],
+    'program': [
+      o('function'),
+    ],
+    'function': [
+      o('FUNCTION WORD', (yy) => new yy.FunctionDeclaration($2, [], new yy.BlockStatement([]), false)),
+    ],
+    'WORD': [
+      o('WORD CHA', () => $1 + $2 ),
+      o('CHA'),
+    ],
 
-console.log('parser', parser);
+    'e': [
+      o('e + e', (yy) => new yy.BinaryExpression($2, $1, $3)),
+      o('e - e', (yy) => new yy.BinaryExpression($2, $1, $3)),
+      o('e * e', (yy) => new yy.BinaryExpression($2, $1, $3)),
+      o('e / e', (yy) => new yy.BinaryExpression($2, $1, $3)),
+      o('e ^ e', (yy) => new yy.BinaryExpression($2, $1, $3)),
+      o('- e',   (yy) => new yy.UnaryExpression($1, $2), {'prec': 'UMINUS'}),
+      o('( e )', (yy) => $2),
+      o('NUMBER', (yy) => new yy.Literal(Number($1), $1)),
+    ]
+  },
+  // 'startSymbol': 'programs',
+};
+
+console.log('grammar', grammar);
+
+const parser = new Parser(grammar, {});
+// parser.lexer = new Lexer(lexData);
 
 parser.yy.addNodePosition = addNodePosition;
 
-const nodes2:any = nodes;
-for(let name in nodes2){
-    if(typeof nodes2[name] == 'function'){
-        parser.yy[name] = nodes2[name];
-    }
+const nodes2: any = nodes;
+for (const name in nodes2) {
+  if (typeof nodes2[name] === 'function') {
+    parser.yy[name] = nodes2[name];
+  }
 }
-
-const test = parser.parse(" (1 + 2) * -3");
-console.log('AST', test);
-console.log('code', escodegen.generate(test))
-
-
 const erb = readFileSync('test/TITLE.ERB', {encoding: 'utf-8'});
 
-console.log(erb);
+const test = parser.parse(erb);
+console.log('AST', test);
+console.log('code', escodegen.generate(test));
 
+console.log(erb);
