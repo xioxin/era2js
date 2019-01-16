@@ -1,6 +1,10 @@
 // import {Nodes} from "./node";
 import { AllNodes } from './nodes';
 
+(global as any).$$test = [];
+
+
+
 export function addNodePosition(yy: any, pos0: any) {
     return (callback: any) => {
         let r;
@@ -10,8 +14,9 @@ export function addNodePosition(yy: any, pos0: any) {
             r = callback;
         }
         if (typeof r === 'object') {
-            r.position = pos0;
+            (r as any).position = pos0;
         }
+        (global as any).$$test.push(r);
         return r;
     };
 }
@@ -44,5 +49,10 @@ export function r(s: string[] = [], p: string, a?: string | ((self: any) => any 
             performActionFunctionString = `return '${action}'`;
         }
     }
-    return s.length ? [s , p, performActionFunctionString ] : [p, performActionFunctionString];
+    console.log('s.length', s);
+    if(s.length){
+        return [s , p, performActionFunctionString ];
+    }else {
+        return [p, performActionFunctionString];
+    }
 }

@@ -875,7 +875,21 @@ export class YieldExpression {
     }
 }
 
+export class Notes {
+    readonly type: string;
+    content: string;
+    multiple: boolean;
+    constructor(content: string, multiple: boolean = false) {
+        this.type = Syntax.Notes;
+        this.content = content;
+        this.multiple = multiple;
+    }
+}
+
+
+
 export interface AllNodes {
+    Notes: typeof Notes,
     ArrayExpression: typeof ArrayExpression;
     ArrayPattern: typeof ArrayPattern;
     ArrowFunctionExpression: typeof ArrowFunctionExpression;

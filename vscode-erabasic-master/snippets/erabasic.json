@@ -1,0 +1,270 @@
+{
+    "PRINTDATA Statement": {
+        "prefix": "PRINTDATA",
+        "description": "PRINTDATA Statement",
+        "body": [
+            "PRINTDATA",
+            "\t$0",
+            "ENDDATA"
+        ]
+    },
+    "PRINTDATAL Statement": {
+        "prefix": "PRINTDATAL",
+        "description": "PRINTDATAL Statement",
+        "body": [
+            "PRINTDATAL",
+            "\t$0",
+            "ENDDATA"
+        ]
+    },
+    "PRINTDATAW Statement": {
+        "prefix": "PRINTDATAW",
+        "description": "PRINTDATAW Statement",
+        "body": [
+            "PRINTDATAW",
+            "\t$0",
+            "ENDDATA"
+        ]
+    },
+    "PRINTDATAK Statement": {
+        "prefix": "PRINTDATAK",
+        "description": "PRINTDATAK Statement",
+        "body": [
+            "PRINTDATAK",
+            "\t$0",
+            "ENDDATA"
+        ]
+    },
+    "PRINTDATAKL Statement": {
+        "prefix": "PRINTDATAKL",
+        "description": "PRINTDATAKL Statement",
+        "body": [
+            "PRINTDATAKL",
+            "\t$0",
+            "ENDDATA"
+        ]
+    },
+    "PRINTDATAKW Statement": {
+        "prefix": "PRINTDATAKW",
+        "description": "PRINTDATAKW Statement",
+        "body": [
+            "PRINTDATAKW",
+            "\t$0",
+            "ENDDATA"
+        ]
+    },
+    "PRINTDATAD Statement": {
+        "prefix": "PRINTDATAD",
+        "description": "PRINTDATAD Statement",
+        "body": [
+            "PRINTDATAD",
+            "\t$0",
+            "ENDDATA"
+        ]
+    },
+    "PRINTDATADL Statement": {
+        "prefix": "PRINTDATADL",
+        "description": "PRINTDATADL Statement",
+        "body": [
+            "PRINTDATADL",
+            "\t$0",
+            "ENDDATA"
+        ]
+    },
+    "PRINTDATADW Statement": {
+        "prefix": "PRINTDATADW",
+        "description": "PRINTDATADW Statement",
+        "body": [
+            "PRINTDATADW",
+            "\t$0",
+            "ENDDATA"
+        ]
+    },
+    "STRDATA Statement": {
+        "prefix": "STRDATA",
+        "description": "STRDATA Statement",
+        "body": [
+            "STRDATA",
+            "\t$0",
+            "ENDDATA"
+        ]
+    },
+    "DATALIST Statement": {
+        "prefix": "DATALIST",
+        "description": "DATALIST Statement",
+        "body": [
+            "DATALIST",
+            "\t$0",
+            "ENDLIST"
+        ]
+    },
+    "SIF Statement": {
+        "prefix": "SIF",
+        "description": "SIF Statement",
+        "body": [
+            "SIF ${1:condition}",
+            "\t$0"
+        ]
+    },
+    "IF Statement": {
+        "prefix": "IF",
+        "description": "IF Statement",
+        "body": [
+            "IF ${1:condition}",
+            "\t$0",
+            "ENDIF"
+        ]
+    },
+    "IF-ELSE Statement": {
+        "prefix": "IFELSE",
+        "description": "IF-ELSE Statement",
+        "body": [
+            "IF ${1:condition}",
+            "\t$0",
+            "ELSE",
+            "\t",
+            "ENDIF"
+        ]
+    },
+    "REPEAT Statement": {
+        "prefix": "REPEAT",
+        "description": "REPEAT Statement",
+        "body": [
+            "REPEAT ${1:count}",
+            "\t$0",
+            "REND"
+        ]
+    },
+    "FOR Statement": {
+        "prefix": "FOR",
+        "description": "FOR Statement",
+        "body": [
+            "FOR ${1:count}, ${2:start}, ${3:end}",
+            "\t$0",
+            "NEXT"
+        ]
+    },
+    "WHILE Statement": {
+        "prefix": "WHILE",
+        "description": "WHILE Statement",
+        "body": [
+            "WHILE ${1:condition}",
+            "\t$0",
+            "WEND"
+        ]
+    },
+    "DO-LOOP Statement": {
+        "prefix": "DOLOOP",
+        "description": "DO-LOOP Statement",
+        "body": [
+            "DO",
+            "\t$0",
+            "LOOP ${1:condition}"
+        ]
+    },
+    "SELECTCASE Statement": {
+        "prefix": "SELECTCASE",
+        "description": "SELECTCASE Statement",
+        "body": [
+            "SELECTCASE ${1:key}",
+            "\tCASE ${2:value}",
+            "\t\t$0",
+            "\tCASEELSE",
+            "\t\t",
+            "ENDSELECT"
+        ]
+    },
+    "TRYCCALL Statement": {
+        "prefix": "TRYCCALL",
+        "description": "TRYCCALL Statement",
+        "body": [
+            "TRYCCALL ${1:name}",
+            "\t$0",
+            "CATCH",
+            "\t",
+            "ENDCATCH"
+        ]
+    },
+    "TRYCJUMP Statement": {
+        "prefix": "TRYCJUMP",
+        "description": "TRYCJUMP Statement",
+        "body": [
+            "TRYCJUMP ${1:name}",
+            "\t$0",
+            "CATCH",
+            "\t",
+            "ENDCATCH"
+        ]
+    },
+    "TRYCGOTO Statement": {
+        "prefix": "TRYCGOTO",
+        "description": "TRYCGOTO Statement",
+        "body": [
+            "TRYCGOTO ${1:name}",
+            "\t$0",
+            "CATCH",
+            "\t",
+            "ENDCATCH"
+        ]
+    },
+    "TRYCCALLFORM Statement": {
+        "prefix": "TRYCCALLFORM",
+        "description": "TRYCCALLFORM Statement",
+        "body": [
+            "TRYCCALLFORM ${1:name}",
+            "\t$0",
+            "CATCH",
+            "\t",
+            "ENDCATCH"
+        ]
+    },
+    "TRYCJUMPFORM Statement": {
+        "prefix": "TRYCJUMPFORM",
+        "description": "TRYCJUMPFORM Statement",
+        "body": [
+            "TRYCJUMPFORM ${1:name}",
+            "\t$0",
+            "CATCH",
+            "\t",
+            "ENDCATCH"
+        ]
+    },
+    "TRYCGOTOFORM Statement": {
+        "prefix": "TRYCGOTOFORM",
+        "description": "TRYCGOTOFORM Statement",
+        "body": [
+            "TRYCGOTOFORM ${1:name}",
+            "\t$0",
+            "CATCH",
+            "\t",
+            "ENDCATCH"
+        ]
+    },
+    "TRYCALLLIST Statement": {
+        "prefix": "TRYCALLLIST",
+        "description": "TRYCALLLIST Statement",
+        "body": [
+            "TRYCALLLIST",
+            "\tFUNC ${0:name}",
+            "ENDFUNC"
+        ]
+    },
+    "TRYJUMPLIST Statement": {
+        "prefix": "TRYJUMPLIST",
+        "description": "TRYJUMPLIST Statement",
+        "body": [
+            "TRYJUMPLIST",
+            "\tFUNC ${0:name}",
+            "ENDFUNC"
+        ]
+    },
+    "TRYGOTOLIST Statement": {
+        "prefix": "TRYGOTOLIST",
+        "description": "TRYGOTOLIST Statement",
+        "body": [
+            "TRYGOTOLIST",
+            "\tFUNC ${0:name}",
+            "ENDFUNC"
+        ]
+    }
+}

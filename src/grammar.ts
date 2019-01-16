@@ -1,6 +1,6 @@
-const jison = require('jison');
+const jison = require('jison-gho');
 console.log('jison', jison);
-let Lexer = require('lex');
+// let Lexer = require('lex');
 
 // const Lexer = require('jison-lex');
 const Parser = jison.Parser;
@@ -24,24 +24,28 @@ declare var $9: any;
 declare var $10: any;
 
 const lexData =  {
+  'startConditions': {
+    'FUNC_IN':1,
+  },
   'rules': [
-    r([], '\\s+'),
-    r([], '@\\S+', (self) => {
-      self.begin('FunIn');
+    r([], '@([^\\s\\x21-\\x2f\\x3a-\\x40\\x5b-\\x5e\\x7b-\\x7e]+)', (self) => {
+      this.pushState('FUNC_IN');
       return 'FUNCTION';
     }),
-    r([], ';(.*)', 'NOTES'),
-    r([], '\\*', '*'),
-    r([], '\\/', '/'),
-    r([], '-',  '-'),
-    r([], '\\+', '+'),
-    r([], '\\^', '^'),
-    r([], '\\(', '('),
-    r([], '\\)', ')'),
+    r(['*'], '^;(.*)', 'NOTES'),
+    r(['*'], '\\n|\\r\\n', 'NEW_LINE'),
+    // r([], '\\*', '*'),
+    // r([], '\\/', '/'),
+    // r([], '-',  '-'),
+    // r([], '\\+', '+'),
+    // r([], '\\^', '^'),
+    // r([], '\\(', '('),
+    // r([], '\\)', ')'),
     // ['[0-9]+(?:\\.[0-9]+)?\\b', 'return \'NUMBER\';'],
-    r([], '<<EOF>>', 'EOF'),
-    r([], '\\S', 'CHA'),
-    // r(['FunIn'], '.', 'INVALID'),
+    r(['*'], '\\S+', 'WORD'),
+    r(['*'], '\\s+'),
+    r(['*'], '<<EOF>>', 'EOF'),
+    // r(['FUNC_IN'], '.', 'INVALID'),
   ]
 };
 
@@ -56,21 +60,22 @@ const grammar = {
   'bnf': {
     'expressions': [
       // o("e EOF", () => new ExpressionStatement($1) )
-      o('programs EOF', 'return {type: "out", body: $1};')
+      o('programs EOF', 'return {type: "out", body: $1};'),
     ],
     'programs': [
-      o('programs program', (yy) => $1.body.push($2)),
+      o('programs program', (yy) => ($1.body.push($2), $1)),
       o('program', (yy) => new yy.Script([$1])),
     ],
     'program': [
+      o('line'),
+    ],
+    'line': [
       o('function'),
+      o('NOTES', (yy) => new yy.Notes($1)),
+      o('NEW_LINE', () => null),
     ],
     'function': [
-      o('FUNCTION WORD', (yy) => new yy.FunctionDeclaration($2, [], new yy.BlockStatement([]), false)),
-    ],
-    'WORD': [
-      o('WORD CHA', () => $1 + $2 ),
-      o('CHA'),
+      o('FUNCTION WORD NEW_LINE ', (yy) => new yy.FunctionDeclaration($2, [], new yy.BlockStatement([]), false)),
     ],
 
     'e': [
@@ -87,7 +92,7 @@ const grammar = {
   // 'startSymbol': 'programs',
 };
 
-console.log('grammar', grammar);
+console.log('grammar', JSON.parse(JSON.stringify(grammar)));
 
 const parser = new Parser(grammar, {});
 // parser.lexer = new Lexer(lexData);
@@ -100,9 +105,14 @@ for (const name in nodes2) {
     parser.yy[name] = nodes2[name];
   }
 }
-const erb = readFileSync('test/TITLE.ERB', {encoding: 'utf-8'});
 
-const test = parser.parse(erb);
+const erb = readFileSync('test/TITLE.ERB', {encoding: 'utf-8'});
+try {
+  const test = parser.parse(erb);
+} catch (e) {
+  console.log('$$test', (global as any).$$test);
+  throw e;
+}
 console.log('AST', test);
 console.log('code', escodegen.generate(test));
 

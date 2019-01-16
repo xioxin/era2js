@@ -65,5 +65,6 @@ export const Syntax = {
     VariableDeclarator: 'VariableDeclarator',
     WhileStatement: 'WhileStatement',
     WithStatement: 'WithStatement',
-    YieldExpression: 'YieldExpression'
+    YieldExpression: 'YieldExpression',
+    Notes: 'Notes',
 };
