@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "tsc && devtool ./dist/grammar.js"
+    "test": "node ./dist/grammar.js",
+    "test2": "devtool ./dist/grammar.js"
   },
   "author": "",
   "license": "ISC",
