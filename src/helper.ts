@@ -13,7 +13,7 @@ export function addNodePosition(yy: any, pos0: any) {
         } else {
             r = callback;
         }
-        if (typeof r === 'object') {
+        if (r & typeof r === 'object') {
             (r as any).position = pos0;
         }
         (global as any).$$test.push(r);

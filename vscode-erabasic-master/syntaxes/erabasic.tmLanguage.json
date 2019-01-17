@@ -518,7 +518,7 @@
 				}
 			]
 		},
-		"round-braces": {
+		"round-braces": { //ok
 			"patterns": [
 				{
 					"begin": "\\(",

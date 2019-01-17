@@ -1,3 +1,5 @@
+import {BuiltInCommand} from "./definition";
+
 const jison = require('jison-gho');
 console.log('jison', jison);
 // let Lexer = require('lex');
@@ -5,9 +7,9 @@ console.log('jison', jison);
 // const Lexer = require('jison-lex');
 const Parser = jison.Parser;
 const escodegen = require('escodegen');
-import { readFileSync } from 'fs';
+import {readFileSync} from 'fs';
 
-import { addNodePosition, o, r } from './helper';
+import {addNodePosition, o, r} from './helper';
 import * as nodes from './nodes';
 
 declare var $$: any;
@@ -23,17 +25,29 @@ declare var $8: any;
 declare var $9: any;
 declare var $10: any;
 
-const lexData =  {
+
+const lexData = {
   'startConditions': {
-    'FUNC_IN':1,
+    'FUNC_IN': 1,
   },
   'rules': [
     r([], '@([^\\s\\x21-\\x2f\\x3a-\\x40\\x5b-\\x5e\\x7b-\\x7e]+)', (self) => {
       this.pushState('FUNC_IN');
       return 'FUNCTION';
     }),
+
+    r([], "[^\\s\x21-\x2f\x3a-\x40\x5b-\x5e\x7b-\x7e]+",'identifier'),
+
+    r(['*'], `\\b(${BuiltInCommand.join('|')})\\b`, 'COMMAND'),
     r(['*'], '^;(.*)', 'NOTES'),
     r(['*'], '\\n|\\r\\n', 'NEW_LINE'),
+
+    r(['*'], '\\(', 'ROUND-BRACES-BEGIN'),
+    r(['*'], '(\\))|$', 'ROUND-BRACES-END'),
+
+
+
+
     // r([], '\\*', '*'),
     // r([], '\\/', '/'),
     // r([], '-',  '-'),
@@ -62,6 +76,27 @@ const grammar = {
       // o("e EOF", () => new ExpressionStatement($1) )
       o('programs EOF', 'return {type: "out", body: $1};'),
     ],
+
+    'expression': [
+      o('comment'),
+      o('round-braces'),
+      o('operators'),
+      o('string-literal'),
+      o('numeric-literal'),
+      o('function-call'),
+      o('predefined-variables'),
+      o('identifier'),
+      o('punctuation'),
+    ],
+
+    'round-braces': [
+      o('ROUND-BRACES-BEGIN expression ROUND-BRACES-END', () => [$1, $2, $3])
+    ],
+
+    'comment': [
+      o('NOTES', (yy) => new yy.Notes($1)),
+    ],
+/*
     'programs': [
       o('programs program', (yy) => ($1.body.push($2), $1)),
       o('program', (yy) => new yy.Script([$1])),
@@ -71,11 +106,10 @@ const grammar = {
     ],
     'line': [
       o('function'),
-      o('NOTES', (yy) => new yy.Notes($1)),
       o('NEW_LINE', () => null),
     ],
     'function': [
-      o('FUNCTION WORD NEW_LINE ', (yy) => new yy.FunctionDeclaration($2, [], new yy.BlockStatement([]), false)),
+      o('FUNCTION NEW_LINE ', (yy) => new yy.FunctionDeclaration($2, [], new yy.BlockStatement([]), false)),
     ],
 
     'e': [
@@ -84,10 +118,10 @@ const grammar = {
       o('e * e', (yy) => new yy.BinaryExpression($2, $1, $3)),
       o('e / e', (yy) => new yy.BinaryExpression($2, $1, $3)),
       o('e ^ e', (yy) => new yy.BinaryExpression($2, $1, $3)),
-      o('- e',   (yy) => new yy.UnaryExpression($1, $2), {'prec': 'UMINUS'}),
+      o('- e', (yy) => new yy.UnaryExpression($1, $2), {'prec': 'UMINUS'}),
       o('( e )', (yy) => $2),
       o('NUMBER', (yy) => new yy.Literal(Number($1), $1)),
-    ]
+    ]*/
   },
   // 'startSymbol': 'programs',
 };
