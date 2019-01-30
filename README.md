@@ -20,6 +20,11 @@ https://github.com/sasami/vscode-erabasic
 http://xiaxiansy.pw/sy/index.php/Era%E4%BB%A3%E7%A0%81%E6%95%99%E7%A8%8B%E5%92%8C%E6%B1%89%E5%8C%96%E5%B7%A5%E5%85%B7
 > 汉化的ERA代码教程 了解语法
 
+#### TS编译原理
+https://jkchao.github.io/typescript-book-chinese/compiler/overview.html
+> 参考学习工作原理
+
+
 ## 相关库
 | 组件 | 描述 | 地址 |
 | :--- | :--- | :--- |
