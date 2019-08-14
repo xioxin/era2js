@@ -24,6 +24,20 @@ http://xiaxiansy.pw/sy/index.php/Era%E4%BB%A3%E7%A0%81%E6%95%99%E7%A8%8B%E5%92%8
 https://jkchao.github.io/typescript-book-chinese/compiler/overview.html
 > 参考学习工作原理
 
+#### 别人踩坑经历
+https://blog.zsxsoft.com/post/28
+
+#### sweet.js
+https://www.sweetjs.org/
+###### 中文资料
+https://segmentfault.com/a/1190000000401847
+
+
+
+#### acorn
+https://github.com/acornjs/acorn
+
+
 
 ## 相关库
 | 组件 | 描述 | 地址 |
