@@ -29,7 +29,7 @@ https://blog.zsxsoft.com/post/28
 
 #### sweet.js
 https://www.sweetjs.org/
-###### 中文资料
+##### 中文资料
 https://segmentfault.com/a/1190000000401847
 
 
@@ -37,7 +37,8 @@ https://segmentfault.com/a/1190000000401847
 #### acorn
 https://github.com/acornjs/acorn
 https://juejin.im/post/582425402e958a129926fcb4
-
+##### 可参考的项目
+https://github.com/laosb/hatp
 
 
 ## 相关库
